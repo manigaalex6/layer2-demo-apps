@@ -1,0 +1,19 @@
+# Test environment configuration
+spring:
+  profiles:
+    include: h2
+  
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+
+logging:
+  level:
+    root: WARN
+    msg.onlineshopapi: DEBUG
+    org.springframework.test: DEBUG
+    org.hibernate: WARN
