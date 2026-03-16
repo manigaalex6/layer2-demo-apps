@@ -1,18 +1,37 @@
 # Online Shop
 
-## Functionalities
+This project represents a small-scale e-commerce application.
 
-This project represent a small e-commerce shop.
+## User Roles
 
-- **Product catalog**
-  - Browse a list of products with key information (name, price, etc.).
-  - Open a product detail view to see more information.
-- **Authentication & users**
-  - Sign up, sign in, and sign out.
-  - Manage basic user information (for example, profile data).
-- **Shopping cart**
-  - Add products to the cart from the catalog or detail pages.
-  - Update quantities or remove items from the cart.
-- **Orders**
-  - Create an order based on the current cart contents.
-  - View a list of past orders and inspect their details.
+The application supports two user roles:
+
+- **Customer** - Standard user with shopping capabilities
+- **Administrator** - User with management privileges
+
+## Features
+
+### Customer Features
+
+- **Product Catalog**
+    - Browse products with essential details (name, price, description, etc.)
+    - View detailed product information on dedicated product pages
+- **User Authentication**
+    - Register a new account
+    - Sign in and sign out securely
+- **Shopping Cart**
+    - Add products to cart from catalog or product detail pages
+    - Modify item quantities or remove products from cart
+- **Order Management**
+    - Place orders from current cart items
+    - Review order history and view detailed order information
+
+### Administrator Features
+
+- Includes all customer features
+- **Product Management**
+    - Create new products
+    - Update existing product information
+    - Delete products from the catalog
+- **Order Administration**
+    - Access and review orders from all users
