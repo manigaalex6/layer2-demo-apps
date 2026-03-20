@@ -1,83 +1,46 @@
 package msg.onlineshopapi.service;
 
 import lombok.RequiredArgsConstructor;
-import msg.onlineshopapi.domain.Product;
-import msg.onlineshopapi.domain.Supplier;
-import msg.onlineshopapi.domain.enums.Category;
-import msg.onlineshopapi.dto.ProductCreateDTO;
-import msg.onlineshopapi.dto.ProductDTO;
-import msg.onlineshopapi.dto.ProductUpdateDTO;
-import msg.onlineshopapi.exception.ProductNotFoundException;
-import msg.onlineshopapi.exception.SupplierNotFoundException;
-import msg.onlineshopapi.mapper.ProductMapper;
+import msg.onlineshopapi.exception.ResourceNotFoundException;
+import msg.onlineshopapi.model.Product;
 import msg.onlineshopapi.repository.ProductRepository;
-import msg.onlineshopapi.repository.SupplierRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final SupplierRepository supplierRepository;
 
-    @Transactional
-    public ProductDTO createProduct(ProductCreateDTO dto) {
-        Supplier supplier = supplierRepository.findById(dto.getSupplierId())
-                .orElseThrow(() -> new SupplierNotFoundException(dto.getSupplierId()));
-
-        Product product = ProductMapper.toEntity(dto, supplier);
-        Product savedProduct = productRepository.save(product);
-        return ProductMapper.toDTO(savedProduct);
+    public List<Product> findAll() {
+        return productRepository.findAll();
     }
 
-    @Transactional
-    public ProductDTO updateProduct(UUID id, ProductUpdateDTO dto) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
-
-        Supplier supplier = null;
-        if (dto.getSupplierId() != null) {
-            supplier = supplierRepository.findById(dto.getSupplierId())
-                    .orElseThrow(() -> new SupplierNotFoundException(dto.getSupplierId()));
-        }
-
-        Product updatedProduct = ProductMapper.updateEntity(product, dto, supplier);
-        Product savedProduct = productRepository.save(updatedProduct);
-        return ProductMapper.toDTO(savedProduct);
+    public Optional<Product> findById(UUID id) {
+        return productRepository.findById(id);
     }
 
-    @Transactional(readOnly = true)
-    public ProductDTO getProductById(UUID id) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
-        return ProductMapper.toDTO(product);
+    public Product save(Product product) {
+        return productRepository.save(product);
     }
 
-    @Transactional(readOnly = true)
-    public List<ProductDTO> getAllProducts() {
-        return productRepository.findAll().stream()
-                .map(ProductMapper::toDTO)
-                .collect(Collectors.toList());
+    public Product update(UUID id, Product product) {
+        Product existing = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
+        existing.setName(product.getName());
+        existing.setDescription(product.getDescription());
+        existing.setPrice(product.getPrice());
+        existing.setWeight(product.getWeight());
+        existing.setCategory(product.getCategory());
+        existing.setImageUrl(product.getImageUrl());
+        return productRepository.save(existing);
     }
 
-    @Transactional(readOnly = true)
-    public List<ProductDTO> getProductsByCategory(Category category) {
-        return productRepository.findByCategory(category).stream()
-                .map(ProductMapper::toDTO)
-                .collect(Collectors.toList());
-    }
-
-    @Transactional
-    public void deleteProduct(UUID id) {
-        if (!productRepository.existsById(id)) {
-            throw new ProductNotFoundException(id);
-        }
+    public void deleteById(UUID id) {
         productRepository.deleteById(id);
     }
 }

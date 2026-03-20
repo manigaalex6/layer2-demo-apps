@@ -1,9 +1,9 @@
 package msg.onlineshopapi.repository;
 
-import msg.onlineshopapi.model.Product;
+import msg.onlineshopapi.model.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public interface ProductRepository extends JpaRepository<Product, UUID> {
+public interface OrderRepository extends JpaRepository<Order, UUID> {
 }

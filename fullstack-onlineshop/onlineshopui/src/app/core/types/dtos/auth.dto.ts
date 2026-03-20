@@ -5,8 +5,8 @@ export type LoginCredentialsDto = {
 
 export type RegisterRequestDto = {
     email: string;
-    firstname: string;
-    lastname: string;
+    firstName: string;
+    lastName: string;
     password: string;
 };
 

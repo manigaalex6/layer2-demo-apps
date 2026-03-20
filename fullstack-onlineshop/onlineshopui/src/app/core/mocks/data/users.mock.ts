@@ -4,23 +4,23 @@ export const MOCK_USERS: UserDto[] = [
     {
         id: 'user-1',
         email: 'admin@example.com',
-        firstname: 'Admin',
-        lastname: 'User',
-        role: 'admin'
+        firstName: 'Admin',
+        lastName: 'User',
+        role: 'ADMIN'
     },
     {
         id: 'user-2',
         email: 'user@example.com',
-        firstname: 'John',
-        lastname: 'Doe',
-        role: 'user'
+        firstName: 'John',
+        lastName: 'Doe',
+        role: 'CUSTOMER'
     },
     {
         id: 'user-3',
         email: 'jane@example.com',
-        firstname: 'Jane',
-        lastname: 'Smith',
-        role: 'user'
+        firstName: 'Jane',
+        lastName: 'Smith',
+        role: 'CUSTOMER'
     }
 ];
 

@@ -4,8 +4,8 @@ import { MOCK_USER_CREDENTIALS, MOCK_USERS } from '../../data/users.mock';
 type LoginPayload = { email: string; password: string };
 type RegisterPayload = {
     email: string;
-    firstname: string;
-    lastname: string;
+    firstName: string;
+    lastName: string;
     password: string;
 };
 
@@ -68,9 +68,9 @@ function handleRegister(body: RegisterPayload): HttpResponse<unknown> {
     const newUser = {
         id: `user-${MOCK_USERS.length + 1}`,
         email: body.email,
-        firstname: body.firstname,
-        lastname: body.lastname,
-        role: 'user'
+        firstName: body.firstName,
+        lastName: body.lastName,
+        role: 'CANDIDATE'
     };
 
     MOCK_USERS.push(newUser);

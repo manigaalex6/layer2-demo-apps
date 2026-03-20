@@ -1,18 +1,11 @@
 spring:
-  jpa:
-    show-sql: false
-    properties:
-      hibernate:
-        format_sql: false
-  flyway:
-    locations:
-      - classpath:/db/migration
-      - classpath:/mock/db
+  datasource:
+    url: jdbc:postgresql://localhost:5432/shopdb
+    username: shopuser
+    password: shoppassword
 
-logging:
-  level:
-    org.hibernate.SQL: WARN
-    org.hibernate.type.descriptor.sql.BasicBinder: WARN
-    org.hibernate: WARN
-    org.springframework.jdbc: WARN
-    msg.onlineshopapi: INFO
+app:
+  cors:
+    allowed-origins: http://localhost:4200
+  jwt:
+    secret: bXlTZWNyZXRLZXlGb3JPbmxpbmVTaG9wQVBJMTIzNDU2Nzg=

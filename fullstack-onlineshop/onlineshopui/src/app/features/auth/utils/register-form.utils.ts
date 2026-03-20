@@ -6,11 +6,11 @@ export function createRegisterForm(): FormGroup {
             nonNullable: true,
             validators: [Validators.required, Validators.email]
         }),
-        firstname: new FormControl<string>('', {
+        firstName: new FormControl<string>('', {
             nonNullable: true,
             validators: [Validators.required, Validators.minLength(1)]
         }),
-        lastname: new FormControl<string>('', {
+        lastName: new FormControl<string>('', {
             nonNullable: true,
             validators: [Validators.required, Validators.minLength(1)]
         }),
