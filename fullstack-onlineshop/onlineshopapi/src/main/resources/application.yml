@@ -19,14 +19,11 @@ spring:
     password: ${DB_PASSWORD}
 
   flyway:
-    schemas: onlineshop
+    schemas: public
 
   jpa:
     hibernate:
       ddl-auto: validate
-    properties:
-      hibernate:
-        default_schema: onlineshop
 
 app:
   order:
