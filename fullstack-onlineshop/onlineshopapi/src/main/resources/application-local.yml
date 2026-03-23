@@ -4,6 +4,9 @@ spring:
     username: shopuser
     password: shoppassword
 
+  flyway:
+    locations: classpath:db/migration,classpath:db/migration/local
+
 app:
   cors:
     allowed-origins: http://localhost:4200
