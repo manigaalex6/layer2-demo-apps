@@ -8,7 +8,6 @@ The Project Board can be found here: [Layer 2 Board](https://github.com/orgs/msg
 
 - [FullStack Spring and Angular App](fullstack-onlineshop)
 
-
 ## Contributing
 
 - All changes must go through a PR to the `main` branch.
