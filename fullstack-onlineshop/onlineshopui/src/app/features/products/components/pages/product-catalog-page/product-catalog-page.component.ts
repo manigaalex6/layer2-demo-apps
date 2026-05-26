@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ProductCardComponent } from '../../views/product-card/product-card.component';
 import { SpinnerComponent } from '../../../../../clib/components/spinner/spinner.component';
 import { ModalComponent } from '../../../../../clib/components/modal/modal.component';
@@ -87,10 +88,15 @@ export class ProductCatalogPageComponent implements OnInit {
                     this.productToDelete.set(null);
                     this.loadProducts();
                 },
-                error: err => {
-                    console.error('Failed to delete product:', err);
-                    this.isDeleting.set(false);
-                }
+                error: (err: HttpErrorResponse) => {
+                        this.isDeleting.set(false);
+                        this.showDeleteModal.set(false);
+                        this.productToDelete.set(null);
+                        this.notificationsService.notifyError({
+                            title: 'Delete failed',
+                            message: err.error?.error || 'An unexpected error occurred while deleting the product.'
+                        });
+                    }
             });
     }
 

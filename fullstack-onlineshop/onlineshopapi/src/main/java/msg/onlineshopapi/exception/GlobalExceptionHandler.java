@@ -41,6 +41,15 @@ public class GlobalExceptionHandler {
         ));
     }
 
+    @ExceptionHandler(ProductInOrderException.class)
+    public ResponseEntity<Map<String, Object>> handleProductInOrder(ProductInOrderException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(
+                "timestamp", LocalDateTime.now(),
+                "status", 409,
+                "error", ex.getMessage()
+        ));
+    }
+
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<Map<String, Object>> handleAccessDenied(AccessDeniedException ex) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of(

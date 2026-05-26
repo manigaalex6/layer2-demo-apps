@@ -6,6 +6,7 @@ import msg.onlineshopapi.dto.ProductCategoryDto;
 import msg.onlineshopapi.dto.ProductRequestDto;
 import msg.onlineshopapi.dto.ProductResponseDto;
 import msg.onlineshopapi.dto.mapper.ProductMapper;
+import msg.onlineshopapi.exception.ProductInOrderException;
 import msg.onlineshopapi.exception.ResourceNotFoundException;
 import msg.onlineshopapi.model.Product;
 import msg.onlineshopapi.security.JwtService;
@@ -28,6 +29,7 @@ import java.util.UUID;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -186,6 +188,28 @@ class ProductControllerTest {
 
         mockMvc.perform(delete("/products/{id}", laptopId))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void delete_returns409_whenProductIsInOrder() throws Exception {
+        doThrow(new ProductInOrderException("Cannot delete product 'Laptop' because it is referenced by existing orders."))
+                .when(productService).deleteById(laptopId);
+
+        mockMvc.perform(delete("/products/{id}", laptopId))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.error").value("Cannot delete product 'Laptop' because it is referenced by existing orders."));
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void delete_returns404_whenProductNotFound() throws Exception {
+        doThrow(new ResourceNotFoundException("Product not found with id: " + laptopId))
+                .when(productService).deleteById(laptopId);
+
+        mockMvc.perform(delete("/products/{id}", laptopId))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.error").value("Product not found with id: " + laptopId));
     }
 
     @Test

@@ -1,8 +1,10 @@
 package msg.onlineshopapi.service;
 
 import lombok.RequiredArgsConstructor;
+import msg.onlineshopapi.exception.ProductInOrderException;
 import msg.onlineshopapi.exception.ResourceNotFoundException;
 import msg.onlineshopapi.model.Product;
+import msg.onlineshopapi.repository.OrderDetailRepository;
 import msg.onlineshopapi.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,7 @@ import java.util.UUID;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final OrderDetailRepository orderDetailRepository;
 
     public List<Product> findAll() {
         return productRepository.findAll();
@@ -41,6 +44,14 @@ public class ProductService {
     }
 
     public void deleteById(UUID id) {
-        productRepository.deleteById(id);
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
+
+        if (orderDetailRepository.existsByProduct_Id(id)) {
+            throw new ProductInOrderException("Cannot delete product '" + product.getName()
+                    + "' because it is referenced by existing orders.");
+        }
+
+        productRepository.delete(product);
     }
 }
