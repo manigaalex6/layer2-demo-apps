@@ -1,0 +1,26 @@
+name: Mirror to msg-CareerPaths
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: mirror-main
+  cancel-in-progress: true
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push mirror
+        run: |
+          MIRROR_URL="https://x-access-token:${{ secrets.MIRROR_PAT }}@${{ vars.MIRROR_REPO }}"
+          git remote set-url mirror "$MIRROR_URL" 2>/dev/null \
+            || git remote add mirror "$MIRROR_URL"
+          git push mirror HEAD:refs/heads/main --force
