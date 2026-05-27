@@ -14,9 +14,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
         with:
           fetch-depth: 0
+          persist-credentials: false
+
+      - name: Verify secrets
+        run: |
+          if [ -z "$MIRROR_PAT" ]; then
+            echo "::error::MIRROR_PAT is empty or not set!"
+            exit 1
+          fi
+          if [ -z "$MIRROR_REPO" ]; then
+            echo "::error::MIRROR_REPO is empty or not set!"
+            exit 1
+          fi
+        env:
+          MIRROR_PAT: ${{ secrets.MIRROR_PAT }}
+          MIRROR_REPO: ${{ vars.MIRROR_REPO }}
 
       - name: Push mirror
         run: |
