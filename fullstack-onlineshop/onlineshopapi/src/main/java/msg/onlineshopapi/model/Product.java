@@ -36,7 +36,7 @@ public class Product {
     private ProductCategory category;
 
     @ManyToOne
-    @JoinColumn(name = "supplier_id", nullable = false)
+    @JoinColumn(name = "supplier_id")
     private Supplier supplier;
 
     @Column(name = "image_url")

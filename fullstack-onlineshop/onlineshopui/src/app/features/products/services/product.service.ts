@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { Observable, tap, finalize, catchError, of, map } from 'rxjs';
 import { ProductDto, ProductCategoryDto, SupplierDto } from '../../../core/types/dtos/product.dto';
 import { EnvironmentConfig } from '../../../core/types/providers/environment-config';
@@ -18,18 +18,18 @@ export class ProductService {
     private readonly _selectedProduct = signal<ProductDto | null>(null);
     private readonly _categories = signal<ProductCategoryDto[]>([]);
     private readonly _suppliers = signal<SupplierDto[]>([]);
-    private readonly _loading = signal(false);
+    private readonly _loadingCount = signal(0);
     private readonly _error = signal<string | null>(null);
 
     readonly products = this._products.asReadonly();
     readonly selectedProduct = this._selectedProduct.asReadonly();
     readonly categories = this._categories.asReadonly();
     readonly suppliers = this._suppliers.asReadonly();
-    readonly loading = this._loading.asReadonly();
+    readonly loading = computed(() => this._loadingCount() > 0);
     readonly error = this._error.asReadonly();
 
     loadAll(): Observable<void> {
-        this._loading.set(true);
+        this._loadingCount.update(c => c + 1);
         this._error.set(null);
 
         return this.http.get<ProductDto[]>(this.productsUrl).pipe(
@@ -39,13 +39,13 @@ export class ProductService {
                 this._error.set('Failed to load products');
                 return of([]);
             }),
-            finalize(() => this._loading.set(false)),
+            finalize(() => this._loadingCount.update(c => c - 1)),
             map(() => undefined)
         );
     }
 
     loadById(id: string): Observable<void> {
-        this._loading.set(true);
+        this._loadingCount.update(c => c + 1);
         this._error.set(null);
 
         return this.http.get<ProductDto>(`${this.productsUrl}/${id}`).pipe(
@@ -56,13 +56,13 @@ export class ProductService {
                 this._selectedProduct.set(null);
                 return of(null);
             }),
-            finalize(() => this._loading.set(false)),
+            finalize(() => this._loadingCount.update(c => c - 1)),
             map(() => undefined)
         );
     }
 
     loadCategories(): Observable<void> {
-        this._loading.set(true);
+        this._loadingCount.update(c => c + 1);
         this._error.set(null);
 
         return this.http.get<ProductCategoryDto[]>(this.categoriesUrl).pipe(
@@ -72,13 +72,13 @@ export class ProductService {
                 this._error.set('Failed to load categories');
                 return of([]);
             }),
-            finalize(() => this._loading.set(false)),
+            finalize(() => this._loadingCount.update(c => c - 1)),
             map(() => undefined)
         );
     }
 
     loadSuppliers(): Observable<void> {
-        this._loading.set(true);
+        this._loadingCount.update(c => c + 1);
         this._error.set(null);
 
         return this.http.get<SupplierDto[]>(this.suppliersUrl).pipe(
@@ -88,7 +88,7 @@ export class ProductService {
                 this._error.set('Failed to load suppliers');
                 return of([]);
             }),
-            finalize(() => this._loading.set(false)),
+            finalize(() => this._loadingCount.update(c => c - 1)),
             map(() => undefined)
         );
     }

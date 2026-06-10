@@ -24,7 +24,7 @@ public class ProductMapper {
                 .weight(product.getWeight())
                 .imageUrl(product.getImageUrl())
                 .category(productCategoryMapper.toDto(product.getCategory()))
-                .supplier(supplierMapper.toDto(product.getSupplier()))
+                .supplier(product.getSupplier() != null ? supplierMapper.toDto(product.getSupplier()) : null)
                 .build();
     }
 

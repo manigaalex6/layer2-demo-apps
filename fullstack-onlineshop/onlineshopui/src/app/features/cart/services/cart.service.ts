@@ -19,8 +19,6 @@ export class CartService {
     addItem(productId: string, quantity: number): void {
         if (quantity <= 0) return;
 
-        console.log(`[CartService] Adding item: ${productId}, quantity: ${quantity}`);
-
         this._items.update(items => {
             const existing = items.find(item => item.productId === productId);
             if (!existing) {
@@ -38,8 +36,6 @@ export class CartService {
     }
 
     updateQuantity(productId: string, quantity: number): void {
-        console.log(`[CartService] Updating quantity for: ${productId}, new quantity: ${quantity}`);
-
         if (quantity <= 0) {
             this.removeItem(productId);
             return;
@@ -53,13 +49,11 @@ export class CartService {
     }
 
     removeItem(productId: string): void {
-        console.log(`[CartService] Removing item: ${productId}`);
         this._items.update(items => items.filter(item => item.productId !== productId));
         this.persistToStorage();
     }
 
     clear(): void {
-        console.log('[CartService] Clearing cart');
         this._items.set([]);
         this.persistToStorage();
     }
