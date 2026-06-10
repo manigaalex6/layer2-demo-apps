@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { Observable, tap, finalize, catchError, of, map } from 'rxjs';
-import { ProductDto, ProductCategoryDto } from '../../../core/types/dtos/product.dto';
+import { ProductDto, ProductCategoryDto, SupplierDto } from '../../../core/types/dtos/product.dto';
 import { EnvironmentConfig } from '../../../core/types/providers/environment-config';
 
 @Injectable({
@@ -12,21 +12,24 @@ export class ProductService {
     private readonly environmentConfig = inject(EnvironmentConfig);
     private readonly productsUrl = `${this.environmentConfig.apiUrl}/products`;
     private readonly categoriesUrl = `${this.environmentConfig.apiUrl}/products/categories`;
+    private readonly suppliersUrl = `${this.environmentConfig.apiUrl}/products/suppliers`;
 
     private readonly _products = signal<ProductDto[]>([]);
     private readonly _selectedProduct = signal<ProductDto | null>(null);
     private readonly _categories = signal<ProductCategoryDto[]>([]);
-    private readonly _loading = signal(false);
+    private readonly _suppliers = signal<SupplierDto[]>([]);
+    private readonly _loadingCount = signal(0);
     private readonly _error = signal<string | null>(null);
 
     readonly products = this._products.asReadonly();
     readonly selectedProduct = this._selectedProduct.asReadonly();
     readonly categories = this._categories.asReadonly();
-    readonly loading = this._loading.asReadonly();
+    readonly suppliers = this._suppliers.asReadonly();
+    readonly loading = computed(() => this._loadingCount() > 0);
     readonly error = this._error.asReadonly();
 
     loadAll(): Observable<void> {
-        this._loading.set(true);
+        this._loadingCount.update(c => c + 1);
         this._error.set(null);
 
         return this.http.get<ProductDto[]>(this.productsUrl).pipe(
@@ -36,13 +39,13 @@ export class ProductService {
                 this._error.set('Failed to load products');
                 return of([]);
             }),
-            finalize(() => this._loading.set(false)),
+            finalize(() => this._loadingCount.update(c => c - 1)),
             map(() => undefined)
         );
     }
 
     loadById(id: string): Observable<void> {
-        this._loading.set(true);
+        this._loadingCount.update(c => c + 1);
         this._error.set(null);
 
         return this.http.get<ProductDto>(`${this.productsUrl}/${id}`).pipe(
@@ -53,13 +56,13 @@ export class ProductService {
                 this._selectedProduct.set(null);
                 return of(null);
             }),
-            finalize(() => this._loading.set(false)),
+            finalize(() => this._loadingCount.update(c => c - 1)),
             map(() => undefined)
         );
     }
 
     loadCategories(): Observable<void> {
-        this._loading.set(true);
+        this._loadingCount.update(c => c + 1);
         this._error.set(null);
 
         return this.http.get<ProductCategoryDto[]>(this.categoriesUrl).pipe(
@@ -69,13 +72,29 @@ export class ProductService {
                 this._error.set('Failed to load categories');
                 return of([]);
             }),
-            finalize(() => this._loading.set(false)),
+            finalize(() => this._loadingCount.update(c => c - 1)),
+            map(() => undefined)
+        );
+    }
+
+    loadSuppliers(): Observable<void> {
+        this._loadingCount.update(c => c + 1);
+        this._error.set(null);
+
+        return this.http.get<SupplierDto[]>(this.suppliersUrl).pipe(
+            tap(suppliers => this._suppliers.set(suppliers)),
+            tap(() => this._error.set(null)),
+            catchError(() => {
+                this._error.set('Failed to load suppliers');
+                return of([]);
+            }),
+            finalize(() => this._loadingCount.update(c => c - 1)),
             map(() => undefined)
         );
     }
 
     create(
-        data: Omit<ProductDto, 'id' | 'category'> & { categoryId: string }
+        data: Omit<ProductDto, 'id' | 'category' | 'supplier'> & { categoryId: string; supplierId: string }
     ): Observable<ProductDto> {
         return this.http.post<ProductDto>(this.productsUrl, data).pipe(
             tap(newProduct => {
@@ -86,7 +105,7 @@ export class ProductService {
 
     update(
         id: string,
-        data: Partial<ProductDto> & { categoryId?: string }
+        data: Partial<ProductDto> & { categoryId?: string; supplierId?: string }
     ): Observable<ProductDto> {
         return this.http.put<ProductDto>(`${this.productsUrl}/${id}`, data).pipe(
             tap(updatedProduct => {

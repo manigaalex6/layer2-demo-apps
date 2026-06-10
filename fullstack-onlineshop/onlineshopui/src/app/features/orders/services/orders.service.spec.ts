@@ -224,6 +224,13 @@ describe('OrdersService', () => {
     });
 
     describe('create()', () => {
+        const testAddress = {
+            country: 'USA',
+            city: 'Seattle',
+            county: 'King',
+            streetAddress: '123 Pine Street'
+        };
+
         it('should create a new order and add to orders signal', () => {
             // Prepare
             const createOrderData: CreateOrderDto = {
@@ -232,7 +239,8 @@ describe('OrdersService', () => {
                         productId: 'prod-3',
                         quantity: 1
                     }
-                ]
+                ],
+                address: testAddress
             };
 
             const createdOrder: OrderDto = {
@@ -277,7 +285,8 @@ describe('OrdersService', () => {
                         productId: 'prod-2',
                         quantity: 1
                     }
-                ]
+                ],
+                address: testAddress
             };
 
             // Action
@@ -298,7 +307,8 @@ describe('OrdersService', () => {
                         productId: 'prod-1',
                         quantity: 1
                     }
-                ]
+                ],
+                address: testAddress
             };
 
             // Action

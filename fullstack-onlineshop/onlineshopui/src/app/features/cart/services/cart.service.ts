@@ -1,3 +1,4 @@
+// Client-side shopping cart service with reactive state (signals) and localStorage persistence
 import { Injectable, computed, signal } from '@angular/core';
 import { CartItem } from '../types/cart-item.type';
 import { CartStorage } from '../types/cart-storage.type';

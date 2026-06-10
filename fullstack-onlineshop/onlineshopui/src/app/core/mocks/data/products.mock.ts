@@ -1,4 +1,4 @@
-import { ProductCategoryDto, ProductDto } from '../../types/dtos/product.dto';
+import { ProductCategoryDto, ProductDto, SupplierDto } from '../../types/dtos/product.dto';
 
 export const MOCK_CATEGORIES: ProductCategoryDto[] = [
     {
@@ -23,6 +23,33 @@ export const MOCK_CATEGORIES: ProductCategoryDto[] = [
     }
 ];
 
+export const MOCK_SUPPLIERS: SupplierDto[] = [
+    {
+        id: 'supp-1',
+        name: 'TechVision Electronics',
+        contactEmail: 'sales@techvision.com',
+        phone: '+40-21-555-0101'
+    },
+    {
+        id: 'supp-2',
+        name: 'FashionForward Apparel',
+        contactEmail: 'orders@fashionforward.com',
+        phone: '+40-21-555-0102'
+    },
+    {
+        id: 'supp-3',
+        name: 'HomeBase Supplies',
+        contactEmail: 'contact@homebase.com',
+        phone: '+40-21-555-0103'
+    },
+    {
+        id: 'supp-4',
+        name: 'SportsPro Gear',
+        contactEmail: 'info@sportsprogear.com',
+        phone: '+40-21-555-0104'
+    }
+];
+
 export const MOCK_PRODUCTS: ProductDto[] = [
     {
         id: 'prod-1',
@@ -31,6 +58,7 @@ export const MOCK_PRODUCTS: ProductDto[] = [
         price: 149.99,
         weight: 0.25,
         category: MOCK_CATEGORIES[0],
+        supplier: MOCK_SUPPLIERS[0],
         imageUrl: 'https://picsum.photos/seed/headphones/400/300'
     },
     {
@@ -40,6 +68,7 @@ export const MOCK_PRODUCTS: ProductDto[] = [
         price: 299.99,
         weight: 0.05,
         category: MOCK_CATEGORIES[0],
+        supplier: MOCK_SUPPLIERS[0],
         imageUrl: 'https://picsum.photos/seed/smartwatch/400/300'
     },
     {
@@ -49,6 +78,7 @@ export const MOCK_PRODUCTS: ProductDto[] = [
         price: 79.99,
         weight: 0.5,
         category: MOCK_CATEGORIES[0],
+        supplier: MOCK_SUPPLIERS[0],
         imageUrl: 'https://picsum.photos/seed/speaker/400/300'
     },
     {
@@ -58,6 +88,7 @@ export const MOCK_PRODUCTS: ProductDto[] = [
         price: 24.99,
         weight: 0.2,
         category: MOCK_CATEGORIES[1],
+        supplier: MOCK_SUPPLIERS[1],
         imageUrl: 'https://picsum.photos/seed/tshirt/400/300'
     },
     {
@@ -67,6 +98,7 @@ export const MOCK_PRODUCTS: ProductDto[] = [
         price: 59.99,
         weight: 0.6,
         category: MOCK_CATEGORIES[1],
+        supplier: MOCK_SUPPLIERS[1],
         imageUrl: 'https://picsum.photos/seed/jeans/400/300'
     },
     {
@@ -76,6 +108,7 @@ export const MOCK_PRODUCTS: ProductDto[] = [
         price: 34.99,
         weight: 2.5,
         category: MOCK_CATEGORIES[2],
+        supplier: MOCK_SUPPLIERS[2],
         imageUrl: 'https://picsum.photos/seed/hose/400/300'
     },
     {
@@ -85,6 +118,7 @@ export const MOCK_PRODUCTS: ProductDto[] = [
         price: 44.99,
         weight: 0.8,
         category: MOCK_CATEGORIES[2],
+        supplier: MOCK_SUPPLIERS[2],
         imageUrl: 'https://picsum.photos/seed/lamp/400/300'
     },
     {
@@ -94,6 +128,7 @@ export const MOCK_PRODUCTS: ProductDto[] = [
         price: 29.99,
         weight: 1.2,
         category: MOCK_CATEGORIES[3],
+        supplier: MOCK_SUPPLIERS[3],
         imageUrl: 'https://picsum.photos/seed/yogamat/400/300'
     },
     {
@@ -103,6 +138,7 @@ export const MOCK_PRODUCTS: ProductDto[] = [
         price: 89.99,
         weight: 0.7,
         category: MOCK_CATEGORIES[3],
+        supplier: MOCK_SUPPLIERS[3],
         imageUrl: 'https://picsum.photos/seed/shoes/400/300'
     },
     {
@@ -112,6 +148,7 @@ export const MOCK_PRODUCTS: ProductDto[] = [
         price: 69.99,
         weight: 0.03,
         category: MOCK_CATEGORIES[3],
+        supplier: MOCK_SUPPLIERS[3],
         imageUrl: 'https://picsum.photos/seed/tracker/400/300'
     }
 ];
