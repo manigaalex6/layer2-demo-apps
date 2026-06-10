@@ -26,6 +26,16 @@ testem.log
 /typings
 __screenshots__/
 
+# Claude Code
+.claude/
+.mcp.json
+CLAUDE.md
+
+# Generated artifacts
+onboarding-screenshots-*/
+test-results/
+04-documentation/
+
 # System files
 .DS_Store
 Thumbs.db
